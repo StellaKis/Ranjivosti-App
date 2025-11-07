@@ -12,7 +12,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: 'https://ranjivosti-app-frontend.onrender.com/',
   credentials: true
 }));
 app.use(express.json());
