@@ -12,9 +12,10 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.use(cors({
-  origin: 'https://ranjivosti-app-frontend.onrender.com/',
+  origin: 'https://ranjivosti-app-frontend.onrender.com',
   credentials: true
 }));
+
 app.use(express.json());
 
 
