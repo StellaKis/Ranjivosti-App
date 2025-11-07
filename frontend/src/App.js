@@ -9,7 +9,7 @@ function App() {
   async function handleLogin(e) {
     e && e.preventDefault();
     try {
-      const r = await fetch(`http://localhost:4000/login`, {
+      const r = await fetch(`https://ranjivosti-app-backend.onrender.com/getaddress`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password, vuln })
