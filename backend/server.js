@@ -29,7 +29,7 @@ app.use(session({
   cookie: {
     httpOnly: true,
     secure: true,
-    sameSite: 'lax',
+    sameSite: 'none',
     maxAge: 24*60*60*1000 // 1 dan
   }
 }));
