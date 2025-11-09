@@ -6,6 +6,7 @@ import bodyParser from 'body-parser';
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import crypto from "crypto";
+import pgSession from "connect-pg-simple";
 
 dotenv.config();
 const { Pool } = pkg;
@@ -22,14 +23,20 @@ app.use(cors({
 app.use(cookieParser());
 app.use(express.json());
 
+const pgStore = pgSession(session);
+
 app.use(session({
+    store: new pgStore({
+    pool: pool,
+    tableName: 'session' 
+  }),
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   cookie: {
     httpOnly: true,
     secure: true,
-    sameSite: 'lax',
+    sameSite: 'none',
     maxAge: 24*60*60*1000 // 1 dan
   }
 }));
