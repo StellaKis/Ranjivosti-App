@@ -6,12 +6,13 @@ import bodyParser from 'body-parser';
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import crypto from "crypto";
-import pgSession from "connect-pg-simple";
+// import pgSession from "connect-pg-simple";
 
 dotenv.config();
 const { Pool } = pkg;
 
 const app = express();
+app.set('trust proxy', 1);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -23,15 +24,15 @@ app.use(cors({
 app.use(cookieParser());
 app.use(express.json());
 
-const pgStore = pgSession(session);
+// const pgStore = pgSession(session);
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
 app.use(session({
-    store: new pgStore({
-    pool: pool,
-    tableName: 'session' 
-  }),
+//     store: new pgStore({
+//     pool: pool,
+//     tableName: 'session' 
+//   }),
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
