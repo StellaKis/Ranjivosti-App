@@ -25,6 +25,8 @@ app.use(express.json());
 
 const pgStore = pgSession(session);
 
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+
 app.use(session({
     store: new pgStore({
     pool: pool,
@@ -42,8 +44,6 @@ app.use(session({
 }));
 
 let vulnCSRF = false;  
-
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
 app.post('/getaddress', async (req, res) => {
   const { username = '', password = '', vuln = false } = req.body;
