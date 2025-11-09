@@ -131,10 +131,10 @@ function App() {
   return (
     <div style={{ padding: 20, fontFamily: 'Arial, sans-serif' }}>
       <h1>SQL Injection — tautologija</h1>
-      <p><strong>Upute:</strong> Ovo je primjer SQL umetanja.</p>
-      <p>Primjer dohvaća adresu korisnika ako su upisani ispravni korisnički podatci - username i password.</p>
-      <p>Kada je ranjivost isključena upisivanjem ' OR 1=1 -- u polje username ili password rezultira praznim ispisom.</p>
-      <p>Kada je ranjivost uključena upisivanje ' OR 1=1 -- u polje username ili password rezultira ispisom svih parova username, address iz tablice users.</p>
+
+      <p><strong>Upute:</strong> Ovo je primjer SQL umetanja. Primjer dohvaća adresu korisnika ako su upisani ispravni korisnički podatci - username i password.</p>
+      <p>Kada je ranjivost isključena upisivanjem ' OR 1=1 -- u polje username ili password rezultira praznim ispisom. Kada je ranjivost uključena upisivanje ' OR 1=1 -- u polje username ili password rezultira ispisom svih parova username, address iz tablice users.</p>
+      
       <label style={{ display: 'block', marginBottom: 12 }}>
         <input type="checkbox" checked={vuln} onChange={e => setVuln(e.target.checked)} />
         {' '}Ranjivost uključena
@@ -176,6 +176,11 @@ function App() {
       <div>
         <h1>Lažiranje zahtjeva na drugom sjedištu (Cross Site Request Forgery, CSRF)</h1>
 
+        <p><strong>Upute:</strong>Za testiranje ovog dijela stranice potrebno se ulogirati kao jedan od korisnika navedenih u Edgaru. Kada je korisnik prijavljen, potrebno je otići na attack stranicu u posebnoj kartici u pregledniku. Link attack stranice također se nalazi u Edgaru.</p>
+        <p>Kada se vratite na web-aplikaciju Ranjivosti, potrebno je napraviti refresh stranice. </p>
+        <p>Ako je ranjivost bila uključena prilikom posjete attack stranice, prijavljenom korisniku je promjenjena adresa u Attacker Addr 666. Ako je ranjivost bila isključena tijekom posjete attack stranice, prijavljenom korisniku nije promjenjena adresa.</p>
+        <p>Napomena: Ranjivost se prilikom svakog refresha stranice isključuje. Pritiskom na gumb reset, resetiraju se adrese korisnika na početne kako biste mogli ponovno testirati.</p>
+
         <label style={{ display: 'block', marginBottom: 12 }}>
           <input type="checkbox" checked={vulnCSRF} onChange={onToggleCsrf} />
           {' '}CSRF ranjivost uključena
@@ -184,16 +189,16 @@ function App() {
         <div>
           {user ? (
           <div>
-            <div><strong>Logged in as:</strong> {user.username}</div>
-            <div><strong>Address:</strong> {user.address}</div>
-            <button onClick={handleLogout} style={{ marginTop: 8 }}>Logout</button>
+            <div><strong>Prijavljeni korisnik:</strong> {user.username}</div>
+            <div><strong>Adresa:</strong> {user.address}</div>
+            <button onClick={handleLogout} style={{ marginTop: 8 }}>Odjava</button>
             <button onClick={handleReset} style={{ marginTop: 8 }}>Reset</button>
           </div>
         ) : (
           <form onSubmit={handleLogin}>
             <div><label>Username: <input value={loginUser} onChange={e => setLoginUser(e.target.value)} /></label></div>
             <div><label>Password: <input type="password" value={loginPass} onChange={e => setLoginPass(e.target.value)} /></label></div>
-            <div style={{ marginTop: 8 }}><button type="submit">Login</button></div>
+            <div style={{ marginTop: 8 }}><button type="submit">Prijava</button></div>
           </form>
         )}
         </div>
