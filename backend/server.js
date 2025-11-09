@@ -28,8 +28,8 @@ app.use(session({
   saveUninitialized: false,
   cookie: {
     httpOnly: true,
-    secure: true,
-    sameSite: 'none',
+    secure: false,
+    sameSite: 'lax',
     maxAge: 24*60*60*1000 // 1 dan
   }
 }));
