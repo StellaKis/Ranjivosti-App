@@ -32,7 +32,7 @@ app.use(session({
   cookie: {
     httpOnly: true,
     secure: true,
-    sameSite: 'lax',
+    sameSite: 'none',
     maxAge: 24*60*60*1000 // 1 dan
   }
 }));
@@ -101,7 +101,7 @@ app.post('/login', async (req, res) => {
     const token = crypto.randomBytes(16).toString('hex');
     req.session.csrfToken = token;
 
-    return res.json({ success: true, user: { id: user.id, username: user.username, address: user.address}, csrfToken: token });
+    return res.json({ success: true, user: { id: user.id, username: user.username, address: user.address}});
   } catch (err) {
     console.error('/login error', err);
     return res.status(500).json({ success: false, error: 'Server error' });

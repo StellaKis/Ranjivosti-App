@@ -112,9 +112,7 @@ function App() {
     try {
       const r = await fetch('https://ranjivosti-app-backend.onrender.com/reset', {
         method: 'POST',
-        credentials: 'include', // ukloni ako ti endpoint ne zahtijeva session
         headers: { 'Content-Type': 'application/json' }
-        // nema body-a
       });
       const j = await r.json();
       if (r.ok) {
