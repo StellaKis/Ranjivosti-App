@@ -38,7 +38,6 @@ function App() {
 
   async function onToggleCsrf(e) {
     const enabled = e.target.checked;
-    // setVulnCSRF(enabled);
     try {
       const r = await fetch(`https://ranjivosti-app-backend.onrender.com/vuln/csrf`, {
         method: 'POST',
@@ -55,7 +54,6 @@ function App() {
 
   async function handleLogin(e) {
     e && e.preventDefault();
-    // setCsrfMsg('');
     try {
       const r = await fetch(`https://ranjivosti-app-backend.onrender.com/login`, {
         method: 'POST',
@@ -85,7 +83,6 @@ function App() {
       const j = await r.json();
       if (j.success) {
         setUser(null);
-        // setCsrfMsg('Logged out');
       }
     } catch (err) {
       console.error(err);
@@ -111,10 +108,33 @@ function App() {
     }
   }
 
+  async function handleReset() {
+    try {
+      const r = await fetch('https://ranjivosti-app-backend.onrender.com/reset', {
+        method: 'POST',
+        credentials: 'include', // ukloni ako ti endpoint ne zahtijeva session
+        headers: { 'Content-Type': 'application/json' }
+        // nema body-a
+      });
+      const j = await r.json();
+      if (r.ok) {
+        fetchUser();
+      } else {
+        alert('Reset greška: ' + (j.error || JSON.stringify(j)));
+      }
+    } catch (err) {
+      console.error('Reset error', err);
+      alert('Greška pri pozivu reset: ' + err.message);
+    }
+  }
+
   return (
     <div style={{ padding: 20, fontFamily: 'Arial, sans-serif' }}>
       <h1>SQL Injection — tautologija</h1>
-
+      <p><strong>Upute:</strong> Ovo je primjer SQL umetanja.</p>
+      <p>Primjer dohvaća adresu korisnika ako su upisani ispravni korisnički podatci - username i password.</p>
+      <p>Kada je ranjivost isključena upisivanjem ' OR 1=1 -- u polje username ili password rezultira praznim ispisom.</p>
+      <p>Kada je ranjivost uključena upisivanje ' OR 1=1 -- u polje username ili password rezultira ispisom svih parova username, address iz tablice users.</p>
       <label style={{ display: 'block', marginBottom: 12 }}>
         <input type="checkbox" checked={vuln} onChange={e => setVuln(e.target.checked)} />
         {' '}Ranjivost uključena
@@ -144,6 +164,13 @@ function App() {
         <h3>Rezultat</h3>
         <div>{response}</div>
       </div>
+
+      <hr style={{ margin: '20px 0', borderColor: '#ccc' }} />
+
+      <div>
+        <p>SQL injection samo dohvaća podatke iz baze za traženog korisnika, korisnik se prijavlljuje tek u CSRF dijelu niže.</p>
+      </div>
+
       <hr style={{ margin: '20px 0', borderColor: '#ccc' }} />
 
       <div>
@@ -151,7 +178,7 @@ function App() {
 
         <label style={{ display: 'block', marginBottom: 12 }}>
           <input type="checkbox" checked={vulnCSRF} onChange={onToggleCsrf} />
-          {' '}Global CSRF vulnerability (server-side flag)
+          {' '}CSRF ranjivost uključena
         </label>
 
         <div>
@@ -160,13 +187,13 @@ function App() {
             <div><strong>Logged in as:</strong> {user.username}</div>
             <div><strong>Address:</strong> {user.address}</div>
             <button onClick={handleLogout} style={{ marginTop: 8 }}>Logout</button>
+            <button onClick={handleReset} style={{ marginTop: 8 }}>Reset</button>
           </div>
         ) : (
           <form onSubmit={handleLogin}>
             <div><label>Username: <input value={loginUser} onChange={e => setLoginUser(e.target.value)} /></label></div>
             <div><label>Password: <input type="password" value={loginPass} onChange={e => setLoginPass(e.target.value)} /></label></div>
-            <div style={{ marginTop: 8 }}><button type="submit">Login (creates session)</button></div>
-            <div style={{ fontSize:12, color:'#666', marginTop:6 }}>Use seeded users</div>
+            <div style={{ marginTop: 8 }}><button type="submit">Login</button></div>
           </form>
         )}
         </div>

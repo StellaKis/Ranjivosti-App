@@ -6,7 +6,6 @@ import bodyParser from 'body-parser';
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import crypto from "crypto";
-// import pgSession from "connect-pg-simple";
 
 dotenv.config();
 const { Pool } = pkg;
@@ -24,15 +23,9 @@ app.use(cors({
 app.use(cookieParser());
 app.use(express.json());
 
-// const pgStore = pgSession(session);
-
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
 app.use(session({
-//     store: new pgStore({
-//     pool: pool,
-//     tableName: 'session' 
-//   }),
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
@@ -161,7 +154,6 @@ app.post('/change-address', async (req, res) => {
 app.get('/change-address', async (req, res) => {
   const address = typeof req.query.address === 'string' ? req.query.address : '';
 
-
     // usporedba sa CSRF tokenom 
   if (!vulnCSRF) {
     const headerToken = req.get('x-csrf-token');
@@ -185,6 +177,25 @@ app.get('/change-address', async (req, res) => {
     console.error('/change-address error', err);
     return res.status(500).json({ success: false, error: 'Server error' });
   }
+});
+
+app.post('/reset', async (req, res) => {
+  try {
+    await pool.query(
+      'UPDATE users SET address = $1 WHERE username = $2',
+      ['Ivina adresa 15', 'iva.ivic']
+    );
+
+    await pool.query(
+      'UPDATE users SET address = $1 WHERE username = $2',
+      ['Perina adresa 89', 'pero.peric']
+    );
+
+    return res.json({ success: true, message: 'Adrese resetirane' });
+  } catch (err) {
+    console.error('/reset error', err);
+    return res.status(500).json({ success: false, error: String(err) });
+  } 
 });
 
 const PORT =  4000;
